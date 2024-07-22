@@ -1,0 +1,52 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/common :: head">
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <!-- <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4" <div th:replace="~{fragments/common :: menu}"> -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4" th:replace="~{fragments/common :: menu('board')}">
+    </nav>
+
+    <main class="container">
+        <form method="post" action="#" th:action="@{/board/form}" th:object="${board}">
+            <input type="hidden" th:field="*{id}">
+            <div class="bg-body-tertiary p-5 rounded">
+                <h2>게시판</h2>
+                <div class="mb-3">
+                    <label for="title" class="form-label">제목</label>
+                    <!-- <input type="text" class="form-control" id="title" name="title"> -->
+                    <!-- <input type="text" class="form-control" id="title" name="title" th:field="*{title}"> -->
+                    <input type="text" class="form-control" th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" id="title" name="title" th:field="*{title}">
+                    
+                    <!-- <td th:if="${#fields.hasErrors('title')}" th:errors="*{title}">제목 에러 메시지</td> -->
+                    <div id="validationServer03Feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="invalid-feedback">
+                        제목 에러 메시지
+                    </div>
+                    
+                    <label for="content" class="form-label">내용</label>
+                    <!-- <textarea class="form-control" id="content" rows="3" name="content"></textarea> -->
+                    <textarea class="form-control" th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'" id="content" rows="3" name="content" th:field="*{content}"></textarea>
+
+                    <div id="validationServer03Feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="invalid-feedback">
+                        제목 에러 메시지
+                    </div>
+
+                </div>
+                <p class="text-end">
+                    <button type="submit" class="btn btn-primary">확인</button>
+                    <!-- <button type="reset" class="btn btn-primary">취소</button> -->
+                    <a type="reset" class="btn btn-primary" th:href="@{/board/list}">취소</a>
+                </p>
+            </div>
+        </form>
+    </main>
+
+</body>
+
+</html>
