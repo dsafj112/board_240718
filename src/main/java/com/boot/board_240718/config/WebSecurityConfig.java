@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,14 +26,20 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(CsrfConfigurer::disable);
         http
                 .authorizeHttpRequests((requests) -> requests
 //                        .requestMatchers("/", "/home").permitAll()
-                        .requestMatchers("/").permitAll()
+//                        .requestMatchers("/").permitAll()
+//                        .requestMatchers("/", "/css/**").permitAll() //css밑에 있는 모든 파일 허용
+//                        .requestMatchers("/", "/css/**", "/images/**").permitAll() //images밑에 있는 모든 파일 허용
+//                        .requestMatchers("/", "/css/**", "/images/**", "/account/register").permitAll()
+                        .requestMatchers("/", "/css/**", "/images/**", "/account/register", "/api/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
+//                        .loginPage("/login")
+                        .loginPage("/account/login")
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());
@@ -47,11 +54,12 @@ public class WebSecurityConfig {
                 .dataSource(dataSource)
                 // 패스워드 암호화 메소드를 스프링에서 관리
                 .passwordEncoder(passwordEncoder())
+                // 사용자 인증
                 .usersByUsernameQuery("select username,password,enabled "
                         + "from user "
                         + "where username = ?")
+                // 사용자 권한
                 .authoritiesByUsernameQuery("SELECT username, name " +
-                        "SELECT username " +
                         "FROM user_role ur " +
                         "INNER JOIN user u " +
                         "ON ur.user_id = u.id " +

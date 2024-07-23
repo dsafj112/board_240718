@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!-- <html xmlns:th="http://www.thymeleaf.org"> -->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:fragment="head">
     <meta charset="utf-8">
@@ -31,10 +32,20 @@
                         <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                     </li> -->
                 </ul>
-                <!-- <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form> -->
+                sec:authorize="isAuthenticated()"
+                <!-- <form class="d-flex" role="search"> -->
+                    <!-- <button class="btn btn-outline-success" type="submit">Login</button> -->
+                    <a class="btn btn-outline-success mx-2" th:href="@{/account/login}" sec:authorize="!isAuthenticated()">로그인</a>
+                    <a class="btn btn-outline-success" th:href="@{/account/register}" sec:authorize="!isAuthenticated()">회원가입</a>
+                <!-- </form> -->
+                <!-- <form class="d-flex" role="search" sec:authorize="isAuthenticated()" th:action="@{/logout}"> -->
+                <form class="d-flex" role="search" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                    <!-- <span class="text-white">사용자</span> -->
+                    <span class="text-white" sec:authentication="name">사용자</span>
+                    <!-- <span class="text-white mx-2">권한</span> -->
+                    <span class="text-white mx-2" sec:authentication="principal.authorities">권한</span>
+                    <button class="btn btn-outline-success" type="submit">로그아웃</button>
+                </form>
             </div>
         </div>
     </nav>

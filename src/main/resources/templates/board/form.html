@@ -22,30 +22,50 @@
                     <label for="title" class="form-label">제목</label>
                     <!-- <input type="text" class="form-control" id="title" name="title"> -->
                     <!-- <input type="text" class="form-control" id="title" name="title" th:field="*{title}"> -->
-                    <input type="text" class="form-control" th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" id="title" name="title" th:field="*{title}">
-                    
+                    <input type="text" class="form-control"
+                        th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" id="title" name="title"
+                        th:field="*{title}">
+
                     <!-- <td th:if="${#fields.hasErrors('title')}" th:errors="*{title}">제목 에러 메시지</td> -->
-                    <div id="validationServer03Feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="invalid-feedback">
+                    <div id="validationServer03Feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+                        class="invalid-feedback">
                         제목 에러 메시지
                     </div>
-                    
+
                     <label for="content" class="form-label">내용</label>
                     <!-- <textarea class="form-control" id="content" rows="3" name="content"></textarea> -->
-                    <textarea class="form-control" th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'" id="content" rows="3" name="content" th:field="*{content}"></textarea>
+                    <textarea class="form-control" th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'"
+                        id="content" rows="3" name="content" th:field="*{content}"></textarea>
 
-                    <div id="validationServer03Feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="invalid-feedback">
+                    <div id="validationServer03Feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"
+                        class="invalid-feedback">
                         제목 에러 메시지
                     </div>
 
                 </div>
                 <p class="text-end">
                     <button type="submit" class="btn btn-primary">확인</button>
+                    <button type="button" class="btn btn-primary" sec:authorize="hasRole('ROLE_ADMIN')" th:onclick="|deleteBoard(*{id})|">삭제</button>
                     <!-- <button type="reset" class="btn btn-primary">취소</button> -->
                     <a type="reset" class="btn btn-primary" th:href="@{/board/list}">취소</a>
                 </p>
             </div>
         </form>
     </main>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        function deleteBoard(id) {
+            // alert(id);
+            $.ajax({
+                url: '/api/boards/'+id,
+                type: 'DELETE',
+                success: function (result) {
+                    alert("삭제되었습니다.");
+                    location.href="/board/list";
+                }
+            });
+        }
+    </script>
 
 </body>
 

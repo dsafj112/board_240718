@@ -7,19 +7,19 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
-@Data
-public class Board {
+//@Data
+@Getter
+@Setter
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotNull
-//    @Size(min=2, max=30)
-    @Size(min=2, max=30, message =  "제목은 2자이상 30자 이하입니다.")
-    private String title;
-    private String content;
+    private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToMany(mappedBy = "roles")
+//    Set<Student> likes;
+    private List<User> users;
 }
